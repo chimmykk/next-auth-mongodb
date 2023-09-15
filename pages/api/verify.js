@@ -1,34 +1,26 @@
-// pages/api/google-auth.js
+// verify email address // Fix the folder directory * 
 import { connectMongoDB } from '../../lib/mongodb';
-import GoogleUser from '../../models/google'; 
-
+import User from '../../models/user';
 export default async function handler(req, res) {
-  try {
-    await connectMongoDB('google'); 
-
-    if (req.method === 'POST') {
-      const { name, email } = req.body;
-
-      const userExists = await GoogleUser.findOne({ email });
-
-      if (!userExists) {
-        const newUser = new GoogleUser({
-          name,
-          email,
-        
-        });
-
-        await newUser.save(); 
-
-        return res.status(200).json({ message: 'User added successfully' });
-      } else {
-        return res.status(409).json({ message: 'User already exists' });
+  if (req.method === 'GET') {
+    try {
+      const { verification_token } = req.query;
+      await connectMongoDB('email');
+      const user = await User.findOne({ verification_token });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found or already verified.' });
       }
-    } else {
-      return res.status(405).json({ message: 'Method not allowed' });
+      if (user.verified) {
+        return res.status(200).json({ message: 'User is already verified.' });
+      }
+      user.verified = true;
+      await user.save();
+      return res.status(200).json({ message: 'Email verified successfully.' });
+    } catch (error) {
+      console.error('An error occurred while verifying the email:', error);
+      return res.status(500).json({ message: 'An error occurred while verifying the email.' });
     }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Internal server error' });
+  } else {
+    return res.status(405).json({ message: 'Method not allowed.' });
   }
 }
