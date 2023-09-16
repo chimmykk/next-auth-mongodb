@@ -19,12 +19,7 @@ function AddressForm() {
     const fetchObjectId = async () => {
       try {
         if (session?.user?.email) {
-          let response = await fetch(`/api/fetch/route?email=${encodeURIComponent(session.user.email)}`);
-          if (!response.ok) {
-            // If the response is not ok, try fetching from another endpoint
-            response = await fetch(`/api/fetch/googleroute?email=${encodeURIComponent(session.user.email)}`);
-          }
-          
+          const response = await fetch(`/api/fetch/route?email=${encodeURIComponent(session.user.email)}`);
           if (response.ok) {
             const data = await response.json();
             setObjectId(data._id);
