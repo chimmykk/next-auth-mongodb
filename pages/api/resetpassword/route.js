@@ -31,7 +31,7 @@ async function sendResetTokenByEmail(email, passwordResetToken) {
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      await connectMongoDB('email'); 
+      await connectMongoDB(); 
 
       const { email } = req.body;
       const user = await User.findOne({ email });

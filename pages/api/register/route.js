@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       const verificationToken = generateVerificationToken();
       const verificationCode = generateVerificationCode();
 
-      await connectMongoDB('email'); 
+      await connectMongoDB(); 
       await User.create({
         name,
         email,

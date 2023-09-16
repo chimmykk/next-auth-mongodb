@@ -1,16 +1,12 @@
 import { connectMongoDB } from '../../../lib/mongodb';
-import Address from '../../../models/Address'; // Import the Address model
+import Address from '../../../models/Address';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      // Connect to the 'profile' database
-      await connectMongoDB('profile');
+      await connectMongoDB();
+      const { street, city, state, postalCode, country, landmark, contactno, objectId } = req.body;
 
-      // Extract the address data from the request body
-      const { street, city, state, postalCode, country, landmark, contactno } = req.body;
-
-      // Create a new Address document using the imported Address model
       const newAddress = new Address({
         street,
         city,
@@ -19,10 +15,9 @@ export default async function handler(req, res) {
         country,
         landmark,
         contactno,
-   
+        objectId,
       });
 
-      // Save the new Address document to the database
       await newAddress.save();
 
       const successResponse = {

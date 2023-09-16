@@ -54,7 +54,7 @@ const authOptions = {
       if (account.provider === 'google') {
         const { name, email } = user;
         try {
-         await connectMongoDB('google');// Use Google database URI
+         await connectMongoDB();// Use Google database URI
           const userExists = await GoogleUser.findOne({ email });
 
           if (!userExists) {

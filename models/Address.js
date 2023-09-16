@@ -28,6 +28,10 @@ const addressSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  objectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 const Address = mongoose.model('Address', addressSchema);

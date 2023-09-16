@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const { code, newPassword } = req.body;
-      await connectMongoDB('email');
+      await connectMongoDB();
       const user = await User.findOne({ passwordResetToken: code });
 
       if (!user) {
